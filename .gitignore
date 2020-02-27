@@ -1,10 +1,12 @@
 bld*/
 build*/
 cmake_build*/
+cmake-build*/
 dependencies*/
 CMakeFiles/
 stk-editor/
 .vscode/
+.idea/
 
 .config/
 supertuxkart-64

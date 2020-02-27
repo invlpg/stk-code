@@ -101,6 +101,11 @@ void OptionsScreenGeneral::init()
     assert( show_login!= NULL );
     show_login->setState( UserConfigParams::m_always_show_login_screen);
 
+    CheckBoxWidget* enable_rpc = getWidget<CheckBoxWidget>("enable-rpc");
+    assert( enable_rpc != NULL );
+    enable_rpc->setState(UserConfigParams::m_rpc_controller_enabled);
+    enable_rpc->setTooltip(_("Allow other programs to view current game state\nand control the player's kart autonomously"));
+
 #ifdef MOBILE_STK
     if (ExtractMobileAssets::hasFullAssets())
     {
@@ -213,6 +218,12 @@ void OptionsScreenGeneral::eventCallback(Widget* widget, const std::string& name
         CheckBoxWidget* handicap = getWidget<CheckBoxWidget>("enable-handicap");
         assert( handicap != NULL );
         UserConfigParams::m_per_player_difficulty = handicap->getState();
+    }
+    else if (name == "enable-rpc")
+    {
+        CheckBoxWidget* enable_rpc = getWidget<CheckBoxWidget>("enable-rpc");
+        assert( enable_rpc != NULL);
+        UserConfigParams::m_rpc_controller_enabled = enable_rpc->getState();
     }
 #ifdef MOBILE_STK
     else if (name=="assets_settings")

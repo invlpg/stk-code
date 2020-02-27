@@ -46,6 +46,7 @@
 #include "karts/controller/test_ai.hpp"
 #include "karts/controller/network_ai_controller.hpp"
 #include "karts/controller/network_player_controller.hpp"
+#include "karts/controller/rpc_controller.hpp"
 #include "karts/kart.hpp"
 #include "karts/kart_model.hpp"
 #include "karts/kart_properties_manager.hpp"
@@ -502,6 +503,17 @@ std::shared_ptr<AbstractKart> World::createKart
     {
         controller = loadAIController(new_kart.get());
         break;
+    }
+    case RaceManager::KT_RPC:
+    {
+        controller = new RPCController(new_kart.get(), local_player_id);
+
+        const PlayerProfile* p = StateManager::get()
+                ->getActivePlayer(local_player_id)->getConstProfile();
+        if (p && p->getDefaultKartColor() > 0.0f)
+        {
+            ri->setHue(p->getDefaultKartColor());
+        }
     }
     case RaceManager::KT_GHOST:
     case RaceManager::KT_LEADER:

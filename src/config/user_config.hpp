@@ -984,6 +984,13 @@ namespace UserConfigParams
           "Always show the login screen even if last player's session was saved."));
 
 
+    // ---- RPC player controller configuration
+
+    PARAM_PREFIX BoolUserConfigParam        m_rpc_controller_enabled
+            PARAM_DEFAULT(BoolUserConfigParam(false, "rpc_controller_enabled",
+                                                 "Allow RPC clients to control the player."));
+
+
     // ---- Addon server related entries
     PARAM_PREFIX GroupUserConfigParam       m_addon_group
             PARAM_DEFAULT( GroupUserConfigParam("AddonServer",

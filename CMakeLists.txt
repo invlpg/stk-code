@@ -524,7 +524,7 @@ int main() {
   return 0;
 }
 " NO_LIBATOMIC_NEEDED)
-if (NOT NO_LIBATOMIC_NEEDED)
+if (NOT NO_LIBATOMIC_NEEDED AND NOT MSVC)
     target_link_libraries(supertuxkart atomic)
 endif()
 
