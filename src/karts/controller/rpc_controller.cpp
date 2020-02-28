@@ -17,20 +17,30 @@
 
 #include "karts/controller/rpc_controller.hpp"
 
-RPCController::RPCController(AbstractKart *kart, int local_player_id)
+#include "rpc/rpc_controller_manager.hpp"
+
+RPCController::RPCController(AbstractKart* kart, int local_player_id)
     : LocalPlayerController(kart, local_player_id, HANDICAP_NONE)
     , m_user_controls_enabled(true)
 {
     Log::info("RPCController", "Using RPC controller for this race");
+
+    // Register the controller's existence, so RPC remotes know we exist
+    assert( rpc_controller_manager != NULL );
+    rpc_controller_manager->addController(*this);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 RPCController::~RPCController()
 {
-
+    // Unregister the controller's existence, so RPC remotes don't try to use us
+    if (rpc_controller_manager != NULL)
+    {
+        rpc_controller_manager->removeController(*this);
+    }
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 /** Updates the player kart, called once each timestep.
  */
 void RPCController::update(int ticks)
@@ -38,11 +48,12 @@ void RPCController::update(int ticks)
     LocalPlayerController::update(ticks);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 /** Interprets kart actions and sets corresponding values in the kart control
  *  data structure. We mostly defer to LocalPlayerController, so that a human
  *  can control the kart simultaneously, but we can use this to filter certain
- *  actions that we want to prevent the user from executing.
+ *  actions that we want to prevent the user from executing, by returning before
+ *  calling LocalPlayerController::action.
  * \param action  The action to be executed.
  * \param value   If 32768, it indicates a digital value of 'fully set'
  *                if between 1 and 32767, it indicates an analog value,
@@ -52,6 +63,7 @@ void RPCController::update(int ticks)
  *                state change or not.
  * \return        True if dry_run==true and a state change would be triggered.
  *                If dry_run==false, it returns true.
+ * \see           LocalPlayerController::action
  */
 bool RPCController::action(PlayerAction action, int value, bool dry_run)
 {

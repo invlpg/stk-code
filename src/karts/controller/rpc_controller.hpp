@@ -30,7 +30,7 @@ class AbstractKart;
  *          class], allowing multiple players to be controlled simultaneously
  *          via RPC.
  *
- * \ingroup controller
+ * \ingroup controller rpc
  */
 class RPCController : public LocalPlayerController
 {
@@ -38,10 +38,10 @@ private:
     bool         m_user_controls_enabled;
 
 public:
-                 RPCController(AbstractKart *kart, int local_player_id);
+                 RPCController(AbstractKart* kart, int local_player_id);
     virtual     ~RPCController();
 
-    //-------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Event callbacks
             void update         (int ticks) OVERRIDE;
             bool action         (PlayerAction action, int value,

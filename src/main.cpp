@@ -236,6 +236,7 @@
 #include "race/race_manager.hpp"
 #include "replay/replay_play.hpp"
 #include "replay/replay_recorder.hpp"
+#include "rpc/rpc_controller_manager.hpp"
 #include "states_screens/main_menu_screen.hpp"
 #include "states_screens/online/networking_lobby.hpp"
 #include "states_screens/online/register_screen.hpp"
@@ -1840,6 +1841,8 @@ void initRest()
     attachment_manager      = new AttachmentManager    ();
     highscore_manager       = new HighscoreManager     ();
 
+    rpc_controller_manager  = new RPCControllerManager ();
+
     // The maximum texture size can not be set earlier, since
     // e.g. the background image needs to be loaded in high res.
     irr_driver->setMaxTextureSize();
@@ -2457,6 +2460,7 @@ static void cleanSuperTuxKart()
     irr_driver->updateConfigIfRelevant();
     AchievementsManager::destroy();
     Referee::cleanup();
+    if(rpc_controller_manager)  delete rpc_controller_manager;
     if(race_manager)            delete race_manager;
     if(grand_prix_manager)      delete grand_prix_manager;
     if(highscore_manager)       delete highscore_manager;
