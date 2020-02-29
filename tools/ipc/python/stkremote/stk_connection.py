@@ -25,20 +25,36 @@ from .stk_controller import STKController
 
 
 class STKConnection:
+    """ STK RPC channel context manager.
+
+        Instances of this class should only really be used in an `async with`
+        statement, e.g. `async with STKConnection() as controller:`.
+
+        Entering the context manager yields a managed STKController instance.
+        """
+
     hello_str = "this should be echoed back"
 
     @property
     def host(self):
+        """ The network host that this connection is connected to. """
         return self.address.host
 
     @property
     def port(self):
+        """ The network port that this connection is connected to. """
         return self.address.port
 
     def __init__(self, host: str = "127.0.0.1", port: int = 42069):
+        """ Associates a network host and port with this connection. """
         self.address = msgpackrpc.Address(host, port)
 
     async def __aenter__(self) -> STKController:
+        """ Magic method which connects to a running STK instance.
+
+            If no STK instance is running (or the running instance has RPC
+            disabled), this function will continue attempting to connect ad
+            infinitum, until it eventually succeeds. """
         while True:
             try:
                 self.client = \
@@ -56,4 +72,5 @@ class STKConnection:
         return STKController(self)
 
     async def __aexit__(self, exc_type, exc, tb):
+        """ Magic method which closes the socket connection to STK, if open. """
         self.client.close()
