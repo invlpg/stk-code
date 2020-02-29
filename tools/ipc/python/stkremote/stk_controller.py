@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
-from typing import AsyncGenerator
+from typing import AsyncIterator
 
 from .awaitable import future_call
 from .stk_player import STKPlayer
@@ -32,7 +32,7 @@ class STKController:
             manipulation methods aren't as readily exposed to external code. """
         self.connection = connection
 
-    async def frames(self) -> AsyncGenerator[int]:
+    async def frames(self) -> AsyncIterator[int]:
         """ Generator which yields the latest game frame.
 
             This can be used as an input source for CV-based driving
@@ -40,7 +40,7 @@ class STKController:
         for i in range(10):
             yield i
 
-    async def players(self) -> AsyncGenerator[STKPlayer]:
+    async def players(self) -> AsyncIterator[STKPlayer]:
         """ Generator which yields all local players (controlled by the STK
             instance running on this computer) in the current game.
 
