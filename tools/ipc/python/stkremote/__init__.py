@@ -1,5 +1,5 @@
 # IPC client for controlling a SuperTuxKart player / observing its environment
-# Copyright (C) 2019  Carl Albrecht
+# Copyright (C) 2020 Carl Albrecht <carl.albrecht@griffithuni.edu.au>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,3 +13,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+from .stk_connection import STKConnection

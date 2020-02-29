@@ -26,17 +26,17 @@ RPCController::RPCController(AbstractKart* kart, int local_player_id)
     Log::info("RPCController", "Using RPC controller for this race");
 
     // Register the controller's existence, so RPC remotes know we exist
-    assert( rpc_controller_manager != NULL );
-    rpc_controller_manager->addController(*this);
+    assert( rpc::rpc_controller_manager != NULL );
+    rpc::rpc_controller_manager->addController(*this);
 }
 
 //------------------------------------------------------------------------------
 RPCController::~RPCController()
 {
     // Unregister the controller's existence, so RPC remotes don't try to use us
-    if (rpc_controller_manager != NULL)
+    if (rpc::rpc_controller_manager != NULL)
     {
-        rpc_controller_manager->removeController(*this);
+        rpc::rpc_controller_manager->removeController(*this);
     }
 }
 
@@ -77,4 +77,16 @@ bool RPCController::action(PlayerAction action, int value, bool dry_run)
         // triggered
         return !dry_run;
     }
+}
+
+//------------------------------------------------------------------------------
+void RPCController::disable_user_controls()
+{
+    m_user_controls_enabled = false;
+}
+
+//------------------------------------------------------------------------------
+void RPCController::enable_user_controls()
+{
+    m_user_controls_enabled = true;
 }

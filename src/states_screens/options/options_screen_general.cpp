@@ -38,6 +38,7 @@
 #include "guiengine/widget.hpp"
 #include "io/file_manager.hpp"
 #include "online/request_manager.hpp"
+#include "rpc/server.hpp"
 #include "states_screens/dialogs/download_assets.hpp"
 #include "states_screens/dialogs/message_dialog.hpp"
 #include "states_screens/main_menu_screen.hpp"
@@ -223,7 +224,15 @@ void OptionsScreenGeneral::eventCallback(Widget* widget, const std::string& name
     {
         CheckBoxWidget* enable_rpc = getWidget<CheckBoxWidget>("enable-rpc");
         assert( enable_rpc != NULL);
-        UserConfigParams::m_rpc_controller_enabled = enable_rpc->getState();
+
+        if ((UserConfigParams::m_rpc_controller_enabled = enable_rpc->getState()))
+        {
+            rpc::server = rpc::Server::start();
+        }
+        else if (rpc::server)
+        {
+            rpc::server->stop();
+        }
     }
 #ifdef MOBILE_STK
     else if (name=="assets_settings")

@@ -121,6 +121,10 @@ if(WIN32)
     endif()
 endif()
 
+# Build the rpclib library
+add_subdirectory("${PROJECT_SOURCE_DIR}/lib/rpclib")
+include_directories("${PROJECT_SOURCE_DIR}/lib/rpclib/include")
+
 # These variables enable MSVC to find libraries located in "dependencies"
 if(WIN32)
     set(ENV{PATH} "$ENV{PATH};${PROJECT_SOURCE_DIR}/${DEPENDENCIES}/include")
@@ -576,6 +580,7 @@ target_link_libraries(supertuxkart
     bulletmath
     ${ENET_LIBRARIES}
     stkirrlicht
+    rpc
     ${Angelscript_LIBRARIES}
     ${CURL_LIBRARIES}
     )

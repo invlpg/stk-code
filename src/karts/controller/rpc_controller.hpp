@@ -46,6 +46,10 @@ public:
             void update         (int ticks) OVERRIDE;
             bool action         (PlayerAction action, int value,
                                  bool dry_run=false) OVERRIDE;
+
+    //--------------------------------------------------------------------------
+    virtual void disable_user_controls();
+    virtual void enable_user_controls();
 };
 
 #endif // HEADER_RPC_CONTROLLER_HPP

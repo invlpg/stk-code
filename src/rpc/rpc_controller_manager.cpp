@@ -17,8 +17,12 @@
 
 #include "rpc/rpc_controller_manager.hpp"
 
+namespace rpc {
+
+
 RPCControllerManager* rpc_controller_manager = NULL;
 
+//------------------------------------------------------------------------------
 RPCControllerManager::RPCControllerManager()
     : m_controllers()
 { }
@@ -50,3 +54,6 @@ unsigned int RPCControllerManager::getNumberOfControllers() const
 {
     return m_controllers.size();
 }
+
+
+} // namespace rpc

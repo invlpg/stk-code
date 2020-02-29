@@ -21,6 +21,9 @@
 #include "karts/controller/rpc_controller.hpp"
 #include "utils/ptr_vector.hpp"
 
+namespace rpc {
+
+
 class RPCControllerManager
 {
     PtrVector<RPCController, REF> m_controllers;
@@ -30,12 +33,15 @@ public:
 
     //--------------------------------------------------------------------------
     // Controller collection methods
-            void           addController         (RPCController& controller);
+    virtual void           addController         (RPCController& controller);
     virtual void           removeController      (RPCController& controller);
             RPCController* getController         (int i);
             unsigned int   getNumberOfControllers() const;
 };
 
 extern RPCControllerManager* rpc_controller_manager;
+
+
+} // namespace rpc
 
 #endif // HEADER_RPC_CONTROLLER_MANAGER_HPP

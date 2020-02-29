@@ -237,6 +237,7 @@
 #include "replay/replay_play.hpp"
 #include "replay/replay_recorder.hpp"
 #include "rpc/rpc_controller_manager.hpp"
+#include "rpc/server.hpp"
 #include "states_screens/main_menu_screen.hpp"
 #include "states_screens/online/networking_lobby.hpp"
 #include "states_screens/online/register_screen.hpp"
@@ -1841,7 +1842,7 @@ void initRest()
     attachment_manager      = new AttachmentManager    ();
     highscore_manager       = new HighscoreManager     ();
 
-    rpc_controller_manager  = new RPCControllerManager ();
+    rpc::rpc_controller_manager = new rpc::RPCControllerManager();
 
     // The maximum texture size can not be set earlier, since
     // e.g. the background image needs to be loaded in high res.
@@ -2187,6 +2188,12 @@ int main(int argc, char *argv[])
         }
 
 #ifndef SERVER_ONLY
+        // Start RPC server, if enabled
+        if (UserConfigParams::m_rpc_controller_enabled)
+        {
+            rpc::server = rpc::Server::start();
+        }
+
         if (!ProfileWorld::isNoGraphics())
         {
             // Some Android devices have only 320x240 and height >= 480 is bare
@@ -2460,30 +2467,30 @@ static void cleanSuperTuxKart()
     irr_driver->updateConfigIfRelevant();
     AchievementsManager::destroy();
     Referee::cleanup();
-    if(rpc_controller_manager)  delete rpc_controller_manager;
-    if(race_manager)            delete race_manager;
-    if(grand_prix_manager)      delete grand_prix_manager;
-    if(highscore_manager)       delete highscore_manager;
-    if(attachment_manager)      delete attachment_manager;
+    if(rpc::rpc_controller_manager) delete rpc::rpc_controller_manager;
+    if(race_manager)                delete race_manager;
+    if(grand_prix_manager)          delete grand_prix_manager;
+    if(highscore_manager)           delete highscore_manager;
+    if(attachment_manager)          delete attachment_manager;
     ItemManager::removeTextures();
-    if(powerup_manager)         delete powerup_manager;
-    if(projectile_manager)      delete projectile_manager;
-    if(kart_properties_manager) delete kart_properties_manager;
-    if(track_manager)           delete track_manager;
-    if(material_manager)        delete material_manager;
-    if(history)                 delete history;
+    if(powerup_manager)             delete powerup_manager;
+    if(projectile_manager)          delete projectile_manager;
+    if(kart_properties_manager)     delete kart_properties_manager;
+    if(track_manager)               delete track_manager;
+    if(material_manager)            delete material_manager;
+    if(history)                     delete history;
     ReplayPlay::destroy();
     ReplayRecorder::destroy();
     delete ParticleKindManager::get();
     PlayerManager::destroy();
-    if(unlock_manager)          delete unlock_manager;
+    if(unlock_manager)              delete unlock_manager;
     Online::ProfileManager::destroy();
     GUIEngine::DialogQueue::deallocate();
     GUIEngine::clear();
     GUIEngine::cleanUp();
     GUIEngine::clearScreenCache();
-    if(font_manager)            delete font_manager;
-    if(story_mode_timer)        delete story_mode_timer;
+    if(font_manager)                delete font_manager;
+    if(story_mode_timer)            delete story_mode_timer;
 
     // Now finish shutting down objects which a separate thread. The
     // RequestManager has been signaled to shut down as early as possible,
