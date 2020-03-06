@@ -16,6 +16,12 @@
 
 
 import asyncio
+import enum
+
+
+class DriftDirection(enum.Enum):
+    LEFT = 0
+    RIGHT = 1
 
 
 class STKPlayer:
@@ -57,9 +63,9 @@ class STKPlayer:
             Calling code should not await this method.
 
             :returns: nothing """
-        self.set_fire(True)
+        self.set_firing(True)
         await asyncio.sleep(0.1)
-        self.set_fire(False)
+        self.set_firing(False)
 
     def use_nitrous(self, enable: bool) -> None:
         """ Sets whether or not to use nitrous in order to increase speed.
@@ -71,11 +77,35 @@ class STKPlayer:
             :returns: nothing """
         self.connection.client.notify("use_nitrous", self.pid, enable)
 
-    def set_fire(self, fire: bool) -> None:
+    def set_firing(self, fire: bool) -> None:
         """ Sets whether or not fire is activated. Setting this to True is
             equivalent to holding down the fire key on the keyboard whilst
             playing - picked up items will be used the moment they are obtained.
 
             :param fire: whether or not to "hold down" the fire key
             :returns: nothing """
-        self.connection.client.notify("set_fire", self.pid, fire)
+        self.connection.client.notify("set_firing", self.pid, fire)
+
+    def start_drifting(self, direction: DriftDirection):
+        """ Sets the direction that the player's kart should start drifting in,
+            then initiates a continuous drift, which stops either when the
+            player hits an obstacle / wall etc, or stop_drifting() is called.
+
+            Once a drift is initiated, the steering angle affects how tight the
+            drift is. Note that the kart's steering direction cannot be changed
+            (e.g. from turning / drifting left to turning right) without
+            stopping the current drift, or by changing the drifting direction by
+            calling this method again with the opposite drift direction.
+
+            :param direction: the direction to drift in
+            :returns: nothing """
+        self.connection.client.notify("start_drifting", self.pid, direction)
+
+    def stop_drifting(self):
+        """ Stops the kart from drifting, if a drift was previously initiated by
+            calling start_drifting().
+
+            Does nothing if the kart is not drifting.
+
+            :returns: nothing """
+        self.connection.client.notify("stop_drifting", self.pid)

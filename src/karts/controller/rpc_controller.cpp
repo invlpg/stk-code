@@ -17,6 +17,7 @@
 
 #include "karts/controller/rpc_controller.hpp"
 
+#include "karts/controller/kart_control.hpp"
 #include "rpc/rpc_controller_manager.hpp"
 
 RPCController::RPCController(AbstractKart* kart, int local_player_id)
@@ -89,4 +90,24 @@ void RPCController::disable_user_controls()
 void RPCController::enable_user_controls()
 {
     m_user_controls_enabled = true;
+}
+
+//------------------------------------------------------------------------------
+void RPCController::disable_nitrous()
+{
+    m_controls->setNitro(false);
+}
+
+//------------------------------------------------------------------------------
+void RPCController::enable_nitrous()
+{
+    m_controls->setNitro(true);
+    m_controls->setAccel(1);
+    m_controls->setSkidControl(KartControl::SC_RIGHT);
+}
+
+//------------------------------------------------------------------------------
+void RPCController::set_skid_direction(KartControl::SkidControl sc)
+{
+    m_controls->setSkidControl(sc);
 }

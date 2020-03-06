@@ -19,6 +19,7 @@
 #define HEADER_RPC_CONTROLLER_HPP
 
 #include "karts/controller/local_player_controller.hpp"
+#include "karts/controller/kart_control.hpp"
 
 class AbstractKart;
 
@@ -50,6 +51,9 @@ public:
     //--------------------------------------------------------------------------
     virtual void disable_user_controls();
     virtual void enable_user_controls();
+    virtual void disable_nitrous();
+    virtual void enable_nitrous();
+    virtual void set_skid_direction(KartControl::SkidControl sc);
 };
 
 #endif // HEADER_RPC_CONTROLLER_HPP

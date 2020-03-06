@@ -35,6 +35,9 @@ class Server : public BackgroundTask<Server>
 
     using player_id_t = unsigned int;
 
+public:
+    enum DriftDirection { LEFT, RIGHT, _COUNT };
+
 private:
     Server() = default;
 
@@ -47,6 +50,9 @@ public:
     static bool        game_running();
     static std::string hello(const std::string& echo);
     static player_id_t player_count();
+    static void        set_firing(player_id_t pid, bool firing);
+    static void        start_drifting(player_id_t pid, DriftDirection direction);
+    static void        stop_drifting(player_id_t pid);
     static void        use_nitrous(player_id_t pid, bool enable);
 };
 

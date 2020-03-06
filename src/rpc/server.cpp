@@ -15,6 +15,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <karts/controller/kart_control.hpp>
 #include "rpc/server.hpp"
 
 #include "rpc/rpc_controller_manager.hpp"
@@ -63,6 +64,9 @@ void Server::register_methods(class rpc::server& rpc_server)
     rpc_server.bind("hello", hello);
     rpc_server.bind("disable_player_controls", disable_player_controls);
     rpc_server.bind("player_count", player_count);
+    rpc_server.bind("set_firing", set_firing);
+    rpc_server.bind("start_drifting", start_drifting);
+    rpc_server.bind("stop_drifting", stop_drifting);
     rpc_server.bind("use_nitrous", use_nitrous);
 
     /* Example instance binding (we don't have any instance methods currently)
@@ -107,9 +111,53 @@ Server::player_id_t Server::player_count()
 }
 
 //------------------------------------------------------------------------------
-void Server::use_nitrous(player_id_t c_id, bool enable)
+void Server::set_firing(player_id_t pid, bool firing)
 {
 
+}
+
+//------------------------------------------------------------------------------
+void Server::start_drifting(player_id_t pid, DriftDirection direction)
+{
+    assert( direction < DriftDirection::_COUNT );
+
+    RPCController* controller = rpc_controller_manager->getController(pid);
+
+    switch (direction)
+    {
+    case DriftDirection::LEFT:
+        controller->set_skid_direction(KartControl::SC_LEFT);
+        break;
+
+    case DriftDirection::RIGHT:
+        controller->set_skid_direction(KartControl::SC_RIGHT);
+        break;
+
+    default:
+        assert( false );
+    }
+}
+
+//------------------------------------------------------------------------------
+void Server::stop_drifting(player_id_t pid)
+{
+    RPCController* controller = rpc_controller_manager->getController(pid);
+    controller->set_skid_direction(KartControl::SC_NONE);
+}
+
+//------------------------------------------------------------------------------
+void Server::use_nitrous(player_id_t pid, bool enable)
+{
+    RPCController* controller = rpc_controller_manager->getController(pid);
+
+    if (enable)
+    {
+        controller->enable_nitrous();
+    }
+    else
+    {
+        controller->disable_nitrous();
+    }
 }
 
 

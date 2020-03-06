@@ -16,3 +16,4 @@
 
 
 from .stk_connection import STKConnection
+from .stk_player import DriftDirection

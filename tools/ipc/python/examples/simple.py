@@ -18,7 +18,7 @@
 # instance, then sending some simple player commands to the running game.
 
 
-from stkremote import STKConnection
+from stkremote import STKConnection, DriftDirection
 
 import asyncio
 
@@ -27,6 +27,7 @@ async def player_ai(controller, player):
     print("Player %d added" % player.pid)
 
     player.disable_controls(True)
+    player.start_drifting(DriftDirection.LEFT)
     player.use_nitrous(True)
 
     async for frame in controller.frames():
